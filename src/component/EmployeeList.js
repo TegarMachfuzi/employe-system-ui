@@ -1,8 +1,26 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import EmployeeService from '../service/EmployeeService';
 
 const EmployeeList = () => {
     const navigate = useNavigate();
+
+    const [loading, setLoading] = useState(true);
+    const [employees, setEmployee] = useState(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                const response = await EmployeeService.getAllEmployee();
+                setEmployee(response.data);
+            }catch (error) {
+                console.log(error);
+            }
+            setLoading(false);
+        };
+        fetchData();
+    }, []);
   return (
     <div className='container mx-8 my-8'>
         <div className='h-12'>
@@ -30,27 +48,31 @@ const EmployeeList = () => {
                         </th>
                     </tr>
                 </thead>
-                <tbody className='bg-white'>
-                    <tr>
-                        <td className='text-left px-6 py-4 whitespace-nowrap'>
-                            <div className='text-sm text-gray-500'>Syawal</div>
-                        </td>
-                        <td className='text-left px-6 py-4 whitespace-nowrap'>
-                            <div className='text-sm text-gray-500'>Lani</div>
-                        </td>
-                        <td className='text-left px-6 py-4 whitespace-nowrap'>
-                            <div className='text-sm text-gray-500'>syawalani23@gmail.com</div>
-                        </td>
-                        <td className='text-right px-6 py-4 whitespace-nowrap font-medium text-sm'>
-                            <a href='#' className='text-indigo-600 hover:text-indigo-800 px-4'>
-                                Edit
-                            </a>
-                            <a href='#' className='text-indigo-600 hover:text-indigo-800 px-4'>
-                                Delete
-                            </a>
-                        </td>
-                    </tr>
+                {!loading && (
+                    <tbody className='bg-white'>
+                        {employees.map((employee) => (
+                            <tr>
+                            <td className='text-left px-6 py-4 whitespace-nowrap'>
+                                <div className='text-sm text-gray-500'>{employee.firstName}</div>
+                            </td>
+                            <td className='text-left px-6 py-4 whitespace-nowrap'>
+                                <div className='text-sm text-gray-500'>{employee.lastName}</div>
+                            </td>
+                            <td className='text-left px-6 py-4 whitespace-nowrap'>
+                                <div className='text-sm text-gray-500'>{employee.emailId}</div>
+                            </td>
+                            <td className='text-right px-6 py-4 whitespace-nowrap font-medium text-sm'>
+                                <a href='#' className='text-indigo-600 hover:text-indigo-800 px-4'>
+                                    Edit
+                                </a>
+                                <a href='#' className='text-indigo-600 hover:text-indigo-800 px-4'>
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>
+                        ))}
                 </tbody>
+                )}
             </table>
         </div>
     </div>

@@ -7,8 +7,8 @@ class EmployeeService {
     saveEmployee(employee) {
         return axios.post(EMPLOYEE_API_BASE_URL, employee);
     }
-    getAllEmployee(employee) {
-        return axios.get(EMPLOYEE_API_BASE_URL, employee);
+    getAllEmployee() {
+        return axios.get(EMPLOYEE_API_BASE_URL);
     }
 
 }
