@@ -9,6 +9,17 @@ const EmployeeList = () => {
     const [loading, setLoading] = useState(true);
     const [employees, setEmployee] = useState(null);
 
+    const deleteEmployee = (e, id) => {
+        e.preventDefault();
+        EmployeeService.deleteEmployee(id).then((ress) => {
+            if(employees){
+                setEmployee((prevElement) => {
+                    return prevElement.filter((employee) => employee.id !== id)
+                })
+            }
+        })
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
@@ -52,7 +63,10 @@ const EmployeeList = () => {
                 {!loading && (
                     <tbody className='bg-white'>
                         {employees.map((employee) => (
-                            <Employee employee={employee} key={employee.id}></Employee>
+                            <Employee 
+                                employee={employee} 
+                                deleteEmployee={deleteEmployee}
+                                key={employee.id}></Employee>
                         ))}
                 </tbody>
                 )}
